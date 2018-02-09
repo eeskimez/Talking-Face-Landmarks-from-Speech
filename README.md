@@ -2,7 +2,7 @@
 
 ## Installation
 
-#### The project depends on the following packages:
+#### The project depends on the following Python packages:
 
 * Keras
 * Tensorflow
