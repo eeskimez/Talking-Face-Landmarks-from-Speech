@@ -16,6 +16,8 @@
 * ffmpeg
 * OpenCV
 
+The code is tested on Ubuntu 16.04 and OS X Sierra and High Sierra.
+
 ## Code Example
 
 The generation code has the following arguments:
