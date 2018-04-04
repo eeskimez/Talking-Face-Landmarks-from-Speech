@@ -247,7 +247,7 @@ def melSpectra(y, sr, wsize, hsize):
                                   hop_length = int(sr*hsize),
                                   n_fft=int(sr*wsize)))/cnst
 
-    melspec = np.log(1e-09+librosa.feature.melspectrogram(sr=sr, 
+    melspec = np.log(1e-16+librosa.feature.melspectrogram(sr=sr, 
                                              S=y_stft_abs**2,
                                              n_mels=64))
     return melspec
