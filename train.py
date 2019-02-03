@@ -41,7 +41,7 @@ else:
     shutil.rmtree(output_path)
     os.mkdir(output_path)
 
-num_features_X = 64 # input feature size
+num_features_X = 128 # input feature size
 num_features_Y = 136 # output feature size --> (68, 2)
 num_frames = 75 # time-steps
 batchsize = 128
@@ -56,7 +56,7 @@ frameDelay = args.delay # Time delay
 numEpochs = 200
 dset = h5py.File(args.in_file, 'r') # Input hdf5 file must contain two keys: 'flmark' and 'mel'. 
 # 'flmark' contains the normalized face landmarks and shape must be (numberOfSamples, time-steps, 136)
-# 'mel' contains the features, namely the delta and double delta MFCCs. Shape = (numberOfSamples, time-steps, 64)
+# 'mel' contains the features, namely the delta and double delta MFCCs. Shape = (numberOfSamples, time-steps, 128)
 
 numIt = int(dset['flmark'].shape[0]//batchsize) + 1
 metrics = ['MSE', 'MAE']
