@@ -1,5 +1,5 @@
 # Written by S. Emre Eskimez, in 2017 - University of Rochester
-# Usage: python train.py -i path-to-hdf5-train-file/ -u number-of-hidden-units -d number-of-delay-frames -o output-folder-to-save-model-file
+# Usage: python train.py -i path-to-hdf5-train-file/ -u number-of-hidden-units -d number-of-delay-frames -c number-of-context-frames -o output-folder-to-save-model-file
 
 import tensorflow as tf
 import librosa
@@ -33,6 +33,7 @@ parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("-i", "--in-file", type=str, help="Input file containing train data")
 parser.add_argument("-u", "--hid-unit", type=int, help="hidden units")
 parser.add_argument("-d", "--delay", type=int, help="Delay in terms of number of frames")
+parser.add_argument("-c", "--ctx", type=int, help="context window size")
 parser.add_argument("-o", "--out-fold", type=str, help="output folder")
 args = parser.parse_args()
 
@@ -44,12 +45,14 @@ else:
     shutil.rmtree(output_path)
     os.mkdir(output_path)
 
-num_features_X = 128 # input feature size
+ctxWin = args.ctx
+num_features_X = 128 * (ctxWin+1)# input feature size
 num_features_Y = 136 # output feature size --> (68, 2)
 num_frames = 75 # time-steps
 batchsize = 128
 h_dim = args.hid_unit
 lr = 1e-3
+
 
 drpRate = 0.2 # Dropout rate 
 recDrpRate = 0.2 # Recurrent Dropout rate 
@@ -63,6 +66,14 @@ dset = h5py.File(args.in_file, 'r') # Input hdf5 file must contain two keys: 'fl
 
 numIt = int(dset['flmark'].shape[0]//batchsize) + 1
 metrics = ['MSE', 'MAE']
+
+def addContext(melSpc, ctxWin):
+    ctx = melSpc[:,:]
+    filler = melSpc[0, :]
+    for i in range(ctxWin):
+        melSpc = np.insert(melSpc, 0, filler, axis=0)[:ctx.shape[0], :]
+        ctx = np.append(ctx, melSpc, axis=1)
+    return ctx
 
 def writeParams():
     # Write parameters of the network and training configuration
@@ -111,7 +122,7 @@ def dataGenerator():
                 filler = np.tile(cur_lmark[0:1, :], [frameDelay, 1])
                 cur_lmark = np.insert(cur_lmark, 0, filler, axis=0)[:num_frames]
              
-            X_batch[batch_cnt, :, :] = cur_mel
+            X_batch[batch_cnt, :, :] = addContext(cur_mel, ctxWin)
             Y_batch[batch_cnt, :, :] = cur_lmark
             
             batch_cnt+=1
