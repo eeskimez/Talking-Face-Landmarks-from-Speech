@@ -4,19 +4,19 @@
 
 #### The project depends on the following Python packages:
 
-* Keras
-* Tensorflow
-* Librosa
-* opencv-python
-* dlib
-* tqdm
+* Keras --- 2.2.4
+* Tensorflow --- 1.9.0
+* Librosa --- 0.6.0
+* opencv-python --- 3.3.0.10
+* dlib --- 19.7.0
+* tqdm 
 * subprocess
 
 #### It also depends on the following packages:
-* ffmpeg
-* OpenCV
+* ffmpeg --- 3.4.1
+* OpenCV --- 3.3.0
 
-The code has been tested on Ubuntu 16.04 and OS X Sierra and High Sierra.
+The code has been tested on Ubuntu 16.04 and OS X Sierra and High Sierra. 
 
 ## Code Example
 
