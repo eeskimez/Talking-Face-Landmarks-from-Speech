@@ -54,9 +54,9 @@ recDrpRate = 0.2 # Recurrent Dropout rate
 frameDelay = args.delay # Time delay
 
 numEpochs = 200
-dset = h5py.File(args.in_file, 'r') # Input hdf5 file must contain two keys: 'flmark' and 'mel'. 
+dset = h5py.File(args.in_file, 'r') # Input hdf5 file must contain two keys: 'flmark' and 'MFCCs'. 
 # 'flmark' contains the normalized face landmarks and shape must be (numberOfSamples, time-steps, 136)
-# 'mel' contains the features, namely the delta and double delta MFCCs. Shape = (numberOfSamples, time-steps, 128)
+# 'MFCCs' contains the features, namely the delta and double delta MFCCs. Shape = (numberOfSamples, time-steps, 128)
 
 numIt = int(dset['flmark'].shape[0]//batchsize) + 1
 metrics = ['MSE', 'MAE']
@@ -102,7 +102,7 @@ def dataGenerator():
         random.shuffle(idxList)
         for i in idxList:
             cur_lmark = dset['flmark'][i, :, :]
-            cur_mel = dset['mel'][i, :, :]
+            cur_mel = dset['MFCCs'][i, :, :]
 
             if np.any(cur_mel==0.0) or np.any(cur_lmark==0.0):
                 continue
