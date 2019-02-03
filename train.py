@@ -1,3 +1,6 @@
+# Written by S. Emre Eskimez, in 2017 - University of Rochester
+# Usage: python train.py -i path-to-hdf5-train-file/ -u number-of-hidden-units -d number-of-delay-frames -o output-folder-to-save-model-file
+
 import tensorflow as tf
 import librosa
 import numpy as np
@@ -54,9 +57,9 @@ recDrpRate = 0.2 # Recurrent Dropout rate
 frameDelay = args.delay # Time delay
 
 numEpochs = 200
-dset = h5py.File(args.in_file, 'r') # Input hdf5 file must contain two keys: 'flmark' and 'MFCCs'. 
+dset = h5py.File(args.in_file, 'r') # Input hdf5 file must contain two keys: 'flmark' and 'MelFeatures'. 
 # 'flmark' contains the normalized face landmarks and shape must be (numberOfSamples, time-steps, 136)
-# 'MFCCs' contains the features, namely the delta and double delta MFCCs. Shape = (numberOfSamples, time-steps, 128)
+# 'MelFeatures' contains the features, namely the delta and double delta mel-spectrogram. Shape = (numberOfSamples, time-steps, 128)
 
 numIt = int(dset['flmark'].shape[0]//batchsize) + 1
 metrics = ['MSE', 'MAE']
@@ -102,10 +105,7 @@ def dataGenerator():
         random.shuffle(idxList)
         for i in idxList:
             cur_lmark = dset['flmark'][i, :, :]
-            cur_mel = dset['MFCCs'][i, :, :]
-
-            if np.any(cur_mel==0.0) or np.any(cur_lmark==0.0):
-                continue
+            cur_mel = dset['MelFeatures'][i, :, :]
 
             if frameDelay > 0:
                 filler = np.tile(cur_lmark[0:1, :], [frameDelay, 1])

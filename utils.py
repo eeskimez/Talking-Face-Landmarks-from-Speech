@@ -107,6 +107,30 @@ class faceNormalizer(object):
 
         return alignedSeq
 
+    def transferExpression(self, lmarkSeq, meanShape):
+        exptransSeq = copy.deepcopy(lmarkSeq)
+        firstFlmark = exptransSeq[0,:,:]
+        indexes = np.array([60, 64, 62, 67])
+
+        tformMS = cv2.estimateRigidTransform(firstFlmark[:,:], np.float32(meanShape[:,:]), True)
+
+        sx = np.sign(tformMS[0,0])*np.sqrt(tformMS[0,0]**2 + tformMS[0,1]**2)
+        sy = np.sign(tformMS[1,0])*np.sqrt(tformMS[1,0]**2 + tformMS[1,1]**2)
+        print sx, sy
+        prevLmark = copy.deepcopy(firstFlmark)
+        prevExpTransFlmark = copy.deepcopy(meanShape)
+
+        zeroVecD = np.zeros((1, 68, 2))
+        diff = np.cumsum(np.insert(np.diff(exptransSeq, n=1, axis=0), 0, zeroVecD, axis=0), axis=0)
+        msSeq = np.tile(np.reshape(meanShape, (1, 68, 2)), [lmarkSeq.shape[0], 1, 1])
+
+        diff[:, :, 0] = abs(sx)*diff[:, :, 0]
+        diff[:, :, 1] = abs(sy)*diff[:, :, 1]
+
+        exptransSeq = diff + msSeq
+
+        return exptransSeq
+
     def unitNorm(self, flmarkSeq):
         normSeq = copy.deepcopy(flmarkSeq)
         normSeq[:, : , 0] /= self.w
