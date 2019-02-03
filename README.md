@@ -39,7 +39,7 @@ python generate.py -i test_samples/test1.flac -m models/D40_C3.h5 -d 1 -c 3 -o r
 You can run featureExtractor.py to extract features from videos directly. The arguments are as follows:
 
 * -vp --- Input folder containing video files (if your video file types are different from .mpg or .mp4, please modify the script accordingly)
-* -sp --- Path to shape_predictor_68_face_landmarks.dat. You can download this file [a here](https://github.com/AKSHAYUBHAT/TensorFace/blob/master/openface/models/dlib/shape_predictor_68_face_landmarks.dat).
+* -sp --- Path to shape_predictor_68_face_landmarks.dat. You can download this file [here](https://github.com/AKSHAYUBHAT/TensorFace/blob/master/openface/models/dlib/shape_predictor_68_face_landmarks.dat).
 * -o --- Output file name
 
 Usage: 
