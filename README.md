@@ -1,5 +1,11 @@
 # Generating Talking Face Landmarks
 
+The code for [the paper](https://link.springer.com/chapter/10.1007/978-3-319-93764-9_35) "Generating Talking Face Landmarks from Speech."
+
+You can find the project page [here](http://www2.ece.rochester.edu/projects/air/projects/talkingface.html).
+
+An improved version of this project can be found [here](http://www2.ece.rochester.edu/projects/air/projects/3Dtalkingface.html).
+
 ## Installation
 
 #### The project depends on the following Python packages:
@@ -62,4 +68,17 @@ Usage:
 
 ```
 python train.py -i path-to-hdf5-train-file/ -u number-of-hidden-units -d number-of-delay-frames -c number-of-context-frames -o output-folder-to-save-model-file
+```
+
+## Citation
+
+```
+@inproceedings{eskimez2018generating,
+  title={Generating talking face landmarks from speech},
+  author={Eskimez, Sefik Emre and Maddox, Ross K and Xu, Chenliang and Duan, Zhiyao},
+  booktitle={International Conference on Latent Variable Analysis and Signal Separation},
+  pages={372--381},
+  year={2018},
+  organization={Springer}
+}
 ```
