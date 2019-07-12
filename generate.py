@@ -44,6 +44,8 @@ else:
     os.mkdir(output_path)
 
 model = load_model(args.model)
+model.summary()
+exit()
 
 test_file = args.in_file
 

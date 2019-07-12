@@ -116,7 +116,7 @@ class faceNormalizer(object):
 
         sx = np.sign(tformMS[0,0])*np.sqrt(tformMS[0,0]**2 + tformMS[0,1]**2)
         sy = np.sign(tformMS[1,0])*np.sqrt(tformMS[1,0]**2 + tformMS[1,1]**2)
-        print sx, sy
+        # print sx, sy
         prevLmark = copy.deepcopy(firstFlmark)
         prevExpTransFlmark = copy.deepcopy(meanShape)
 
@@ -137,62 +137,17 @@ class faceNormalizer(object):
         normSeq[:, : , 1] /= self.h
         return normSeq
 
-def write_video_wpts_wsound_unnorm(frames, sound, fs, path, fname, xLim, yLim):
-    try:
-        os.remove(os.path.join(path, fname+'.mp4'))
-        os.remove(os.path.join(path, fname+'.wav'))
-        os.remove(os.path.join(path, fname+'_ws.mp4'))
-    except:
-        print 'Exp'
-
-    if len(frames.shape) < 3:
-        frames = np.reshape(frames, (frames.shape[0], frames.shape[1]/2, 2))
-    print frames.shape
-
-    FFMpegWriter = manimation.writers['ffmpeg']
-    metadata = dict(title='Movie Test', artist='Matplotlib',
-                    comment='Movie support!')
-    writer = FFMpegWriter(fps=25, metadata=metadata)
-
-    fig = plt.figure(figsize=(10, 10))
-    l, = plt.plot([], [], 'ko', ms=4)
-
-
-    plt.xlim(xLim)
-    plt.ylim(yLim)
-
-    librosa.output.write_wav(os.path.join(path, fname+'.wav'), sound, fs)
-
-    lines = [plt.plot([], [], 'k')[0] for _ in range(3*len(dt))]
-
-    with writer.saving(fig, os.path.join(path, fname+'.mp4'), 150):
-        plt.gca().invert_yaxis()
-        for i in tqdm(range(frames.shape[0])):
-            l.set_data(frames[i,:,0], frames[i,:,1])
-            cnt = 0
-            for refpts in faceLmarkLookup:
-                lines[cnt].set_data([frames[i,refpts[1], 0], frames[i,refpts[0], 0]], [frames[i, refpts[1], 1], frames[i,refpts[0], 1]])
-                cnt+=1
-            writer.grab_frame()
-
-    cmd = 'ffmpeg -i '+os.path.join(path, fname)+'.mp4 -i '+os.path.join(path, fname)+'.wav -c:v copy -c:a aac -strict experimental '+os.path.join(path, fname)+'_ws.mp4'
-    subprocess.call(cmd, shell=True) 
-    print('Muxing Done')
-
-    os.remove(os.path.join(path, fname+'.mp4'))
-    os.remove(os.path.join(path, fname+'.wav'))
-
 def write_video_wpts_wsound(frames, sound, fs, path, fname, xLim, yLim):
     try:
         os.remove(os.path.join(path, fname+'.mp4'))
         os.remove(os.path.join(path, fname+'.wav'))
         os.remove(os.path.join(path, fname+'_ws.mp4'))
     except:
-        print 'Exp'
+        print ('Exp')
 
     if len(frames.shape) < 3:
         frames = np.reshape(frames, (frames.shape[0], frames.shape[1]/2, 2))
-    print frames.shape
+    print (frames.shape)
 
     FFMpegWriter = manimation.writers['ffmpeg']
     metadata = dict(title='Movie Test', artist='Matplotlib',
@@ -212,7 +167,7 @@ def write_video_wpts_wsound(frames, sound, fs, path, fname, xLim, yLim):
     
     if frames.shape[1] == 20:
         lookup = [[x[0] - 48, x[1] - 48] for x in Mouth]
-        print lookup
+        print (lookup)
     else:
         lookup = faceLmarkLookup
 
@@ -239,11 +194,11 @@ def write_video_wpts_wsound(frames, sound, fs, path, fname, xLim, yLim):
 def plot_flmarks(pts, lab, xLim, yLim, xLab, yLab, figsize=(10, 10)):
     if len(pts.shape) != 3:
         pts = np.reshape(pts, (pts.shape[0]/2, 2))
-    print pts.shape
+    print (pts.shape)
 
     if pts.shape[0] == 20:
         lookup = [[x[0] - 48, x[1] - 48] for x in Mouth]
-        print lookup
+        print (lookup)
     else:
         lookup = faceLmarkLookup
 
