@@ -84,7 +84,7 @@ for _ in range(trainDelay):
     generated = np.append(generated, tmp, axis=0)
 
 if len(generated.shape) < 3:
-    generated = np.reshape(generated, (generated.shape[0], generated.shape[1]/2, 2))
+    generated = np.reshape(generated, (generated.shape[0], generated.shape[1]//2, 2))
 
 fnorm = utils.faceNormalizer()
 generated = fnorm.alignEyePointsV2(600*generated) / 600.0 
